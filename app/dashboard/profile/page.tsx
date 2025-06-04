@@ -160,6 +160,7 @@ export default function ProfilePage() {
                     type="email"
                     value={profileData.email}
                     onChange={(e) => handleProfileInputChange("email", e.target.value)}
+                    disabled
                     required
                   />
                 </div>
@@ -174,7 +175,7 @@ export default function ProfilePage() {
                   />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="role">Role</Label>
                     <Input
@@ -193,7 +194,7 @@ export default function ProfilePage() {
                       onChange={(e) => handleProfileInputChange("department", e.target.value)}
                     />
                   </div>
-                </div>
+                </div> */}
 
                 <div className="flex justify-end">
                   <Button type="submit" disabled={isLoading}>
