@@ -2,8 +2,8 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useEffect } from "react"
+import { useRouter, useParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -11,7 +11,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { Trash2, Plus } from "lucide-react"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Trash2, Plus, CheckCircle } from "lucide-react"
 
 interface Camera {
   id: string
@@ -20,9 +21,30 @@ interface Camera {
   location: string
 }
 
-export default function NewStorePage() {
+// Mock data for the store being edited
+const mockStoreData = {
+  id: 1,
+  storeName: "Downtown Electronics",
+  location: "123 Main St, New York, NY 10001",
+  contactEmail: "john@downtown.com",
+  contactPhone: "+1 (555) 123-4567",
+  storeType: "electronics",
+  loginEmail: "store@downtown.com",
+  rtspUrl: "rtsp://192.168.1.100:554/stream",
+  port: "554",
+  numberOfCameras: "3",
+  cameras: [
+    { id: "1", name: "Front Entrance", streamType: "rtsp", location: "Main entrance" },
+    { id: "2", name: "Cash Register", streamType: "rtsp", location: "Checkout area" },
+    { id: "3", name: "Storage Room", streamType: "rtsp", location: "Back storage" },
+  ],
+}
+
+export default function EditStorePage() {
   const router = useRouter()
+  const params = useParams()
   const [isLoading, setIsLoading] = useState(false)
+  const [successMessage, setSuccessMessage] = useState("")
   const [cameras, setCameras] = useState<Camera[]>([])
 
   const [formData, setFormData] = useState({
@@ -32,11 +54,28 @@ export default function NewStorePage() {
     contactPhone: "",
     storeType: "",
     loginEmail: "",
-    loginPassword: "",
     rtspUrl: "",
     port: "",
     numberOfCameras: "",
   })
+
+  // Load store data on component mount
+  useEffect(() => {
+    // In a real app, you would fetch data based on params.id
+    const storeData = mockStoreData
+    setFormData({
+      storeName: storeData.storeName,
+      location: storeData.location,
+      contactEmail: storeData.contactEmail,
+      contactPhone: storeData.contactPhone,
+      storeType: storeData.storeType,
+      loginEmail: storeData.loginEmail,
+      rtspUrl: storeData.rtspUrl,
+      port: storeData.port,
+      numberOfCameras: storeData.numberOfCameras,
+    })
+    setCameras(storeData.cameras)
+  }, [params.id])
 
   const addCamera = () => {
     const newCamera: Camera = {
@@ -62,9 +101,13 @@ export default function NewStorePage() {
 
     // Simulate API call
     setTimeout(() => {
-      console.log("Store data:", { ...formData, cameras })
+      console.log("Updated store data:", { ...formData, cameras })
+      setSuccessMessage("Store updated successfully!")
       setIsLoading(false)
-      router.push("/dashboard/stores")
+      setTimeout(() => {
+        setSuccessMessage("")
+        router.push("/dashboard/stores")
+      }, 2000)
     }, 1000)
   }
 
@@ -75,9 +118,16 @@ export default function NewStorePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Add New Store</h1>
-        <p className="text-muted-foreground">Create a new store and configure its security system</p>
+        <h1 className="text-3xl font-bold tracking-tight">Edit Store</h1>
+        <p className="text-muted-foreground">Update store information and security system configuration</p>
       </div>
+
+      {successMessage && (
+        <Alert className="border-green-200 bg-green-50 text-green-800">
+          <CheckCircle className="h-4 w-4" />
+          <AlertDescription>{successMessage}</AlertDescription>
+        </Alert>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Store Information */}
@@ -87,16 +137,35 @@ export default function NewStorePage() {
             <CardDescription>Basic information about the store</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="storeName">Store Name *</Label>
-            <Input
-              id="storeName"
-              value={formData.storeName}
-              onChange={(e) => handleInputChange("storeName", e.target.value)}
-              placeholder="Enter store name"
-              required
-            />
-          </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="storeName">Store Name *</Label>
+                <Input
+                  id="storeName"
+                  value={formData.storeName}
+                  onChange={(e) => handleInputChange("storeName", e.target.value)}
+                  placeholder="Enter store name"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="storeType">Store Type *</Label>
+                <Select value={formData.storeType} onValueChange={(value) => handleInputChange("storeType", value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select store type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="electronics">Electronics</SelectItem>
+                    <SelectItem value="jewelry">Jewelry</SelectItem>
+                    <SelectItem value="retail">Retail</SelectItem>
+                    <SelectItem value="grocery">Grocery</SelectItem>
+                    <SelectItem value="mall">Shopping Mall</SelectItem>
+                    <SelectItem value="pharmacy">Pharmacy</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
 
             <div className="space-y-2">
               <Label htmlFor="location">Location *</Label>
@@ -140,7 +209,7 @@ export default function NewStorePage() {
         <Card>
           <CardHeader>
             <CardTitle>Login Credentials</CardTitle>
-            <CardDescription>Create login credentials for the store</CardDescription>
+            <CardDescription>Update login credentials for the store</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -156,15 +225,9 @@ export default function NewStorePage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="loginPassword">Login Password *</Label>
-                <Input
-                  id="loginPassword"
-                  type="password"
-                  value={formData.loginPassword}
-                  onChange={(e) => handleInputChange("loginPassword", e.target.value)}
-                  placeholder="Enter secure password"
-                  required
-                />
+                <Label htmlFor="loginPassword">New Password (Optional)</Label>
+                <Input id="loginPassword" type="password" placeholder="Leave blank to keep current password" />
+                <p className="text-xs text-muted-foreground">Only enter a new password if you want to change it</p>
               </div>
             </div>
           </CardContent>
@@ -216,72 +279,6 @@ export default function NewStorePage() {
           </CardContent>
         </Card>
 
-        {/* Camera Details */}
-        {/* <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              Camera Details
-              <Button type="button" variant="outline" size="sm" onClick={addCamera}>
-                <Plus className="mr-2 h-4 w-4" />
-                Add Camera
-              </Button>
-            </CardTitle>
-            <CardDescription>Configure individual camera settings</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {cameras.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
-                No cameras added yet. Click "Add Camera" to get started.
-              </div>
-            ) : (
-              cameras.map((camera, index) => (
-                <div key={camera.id} className="border rounded-lg p-4 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <Badge variant="outline">Camera {index + 1}</Badge>
-                    <Button type="button" variant="ghost" size="sm" onClick={() => removeCamera(camera.id)}>
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="space-y-2">
-                      <Label>Camera Name</Label>
-                      <Input
-                        value={camera.name}
-                        onChange={(e) => updateCamera(camera.id, "name", e.target.value)}
-                        placeholder="Front Entrance"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Stream Type</Label>
-                      <Select
-                        value={camera.streamType}
-                        onValueChange={(value) => updateCamera(camera.id, "streamType", value)}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="rtsp">RTSP</SelectItem>
-                          <SelectItem value="http">HTTP</SelectItem>
-                          <SelectItem value="rtmp">RTMP</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Location</Label>
-                      <Input
-                        value={camera.location}
-                        onChange={(e) => updateCamera(camera.id, "location", e.target.value)}
-                        placeholder="Main entrance"
-                      />
-                    </div>
-                  </div>
-                </div>
-              ))
-            )}
-          </CardContent>
-        </Card> */}
 
         {/* Submit Buttons */}
         <div className="flex items-center justify-end space-x-4">
@@ -289,7 +286,7 @@ export default function NewStorePage() {
             Cancel
           </Button>
           <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Creating Store..." : "Create Store"}
+            {isLoading ? "Updating Store..." : "Update Store"}
           </Button>
         </div>
       </form>

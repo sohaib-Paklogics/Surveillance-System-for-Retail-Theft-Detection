@@ -31,6 +31,7 @@ import {
   LogOut,
   Shield,
   ChevronUp,
+  FileText,
 } from "lucide-react"
 
 const menuItems = [
@@ -48,6 +49,11 @@ const menuItems = [
     title: "Payment Management",
     url: "/dashboard/payments",
     icon: CreditCard,
+  },
+  {
+    title: "Payment Reports",
+    url: "/dashboard/reports",
+    icon: FileText,
   },
   {
     title: "Feedback Management",
