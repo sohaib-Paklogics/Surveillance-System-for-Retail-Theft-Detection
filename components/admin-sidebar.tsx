@@ -53,12 +53,7 @@ const menuItems = [
     title: "Feedback Management",
     url: "/dashboard/feedback",
     icon: MessageSquare,
-  },
-  {
-    title: "Profile Settings",
-    url: "/dashboard/profile",
-    icon: Settings,
-  },
+  }
 ]
 
 export function AdminSidebar() {
@@ -91,7 +86,7 @@ export function AdminSidebar() {
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={pathname === item.url}>
+                  <SidebarMenuButton asChild isActive={pathname === item.url}  className="text-primary ">
                     <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>

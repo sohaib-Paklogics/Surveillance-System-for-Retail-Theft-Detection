@@ -29,7 +29,7 @@ export default function ForgotPasswordPage() {
   if (isSubmitted) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
-        <Card className="w-full max-w-md">
+        <Card className="w-full max-w-md bg-white">
           <CardHeader className="text-center">
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
               <Mail className="h-6 w-6 text-green-600 dark:text-green-400" />
@@ -57,7 +57,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 p-4">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md bg-white">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-100">
             <Shield className="h-6 w-6 text-[#2563EB]" />
@@ -84,7 +84,7 @@ export default function ForgotPasswordPage() {
             </Button>
 
             <Link href="/auth/login">
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full mt-4">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Login
               </Button>
