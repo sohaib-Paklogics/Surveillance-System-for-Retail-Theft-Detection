@@ -110,7 +110,7 @@ export default function ProfilePage() {
               <CardDescription>Update your personal information and contact details</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="flex items-center space-x-4">
+              {/* <div className="flex items-center space-x-4">
                 <Avatar className="h-20 w-20">
                   <AvatarImage src="/placeholder-user.jpg" alt="Profile" />
                   <AvatarFallback className="text-lg">
@@ -127,7 +127,7 @@ export default function ProfilePage() {
                     Change Avatar
                   </Button>
                 </div>
-              </div>
+              </div> */}
 
               <Separator />
 

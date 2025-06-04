@@ -83,10 +83,10 @@ export function AdminSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="flex flex-col gap-2">
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={pathname === item.url}  className="text-primary ">
+                  <SidebarMenuButton asChild isActive={pathname === item.url}  className="text-black">
                     <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>

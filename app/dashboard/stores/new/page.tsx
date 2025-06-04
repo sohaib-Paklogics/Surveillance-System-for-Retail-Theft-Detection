@@ -236,7 +236,7 @@ export default function NewStorePage() {
         </Card>
 
         {/* Camera Details */}
-        <Card>
+        {/* <Card>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               Camera Details
@@ -300,7 +300,7 @@ export default function NewStorePage() {
               ))
             )}
           </CardContent>
-        </Card>
+        </Card> */}
 
         {/* Submit Buttons */}
         <div className="flex items-center justify-end space-x-4">
